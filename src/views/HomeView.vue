@@ -1,28 +1,33 @@
 <template>
   <main>
-    <NavbarComponent>
-      
-    </NavbarComponent>
+    <NavbarComponent @change-tab="handleTabChange" />
 
     <h1 class="text-4xl font-bold text-center mb-8">Bienvenido a la aplicación</h1>
-    <button
-      @click="handleLogout"
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-      Cerrar Sesión
-    </button>
+
+    <div class="mt-8">
+      <component :is="currentComponent" />
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
 import NavbarComponent from '@/components/NavbarComponent.vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/user'
+import XSSComponent from '@/components/Attakcs/XSSComponent.vue'
+import SQLInjComponent from '@/components/Attakcs/SQLInjComponent.vue'
+import { ref } from 'vue'
+import { computed } from 'vue'
 
-const router = useRouter()
-const authStore = useAuthStore()
-
-const handleLogout = async () => {
-  await authStore.logout()
-  router.push('/login')
+const currentTab = ref('xss') // Tab por defecto
+const componentsMap = {
+  xss: XSSComponent,
+  sql: SQLInjComponent,
 }
+
+const currentComponent = computed(() => componentsMap[currentTab.value])
+
+const handleTabChange = (tab: string) => {
+  currentTab.value = tab
+}
+
+
 </script>

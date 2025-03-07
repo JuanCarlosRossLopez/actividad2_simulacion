@@ -50,10 +50,23 @@ export const RegisterService = async (email: string, password: string) => {
 
 export const LogoutService = async () => {
   try {
-    return await genericRequestAuthenticated(headers, base_url + "/users/logout", "POST");
+    const token = localStorage.getItem('token');
+    console.log("Token enviado en logout:", token);
+
+    const response = await genericRequestAuthenticated(
+      { 'Content-Type': 'application/json' },
+      base_url + '/users/logout',
+      'POST',
+      { token }
+    );
+
+    console.log("Logout response:", response);
+    return response;
   } catch (error) {
+    console.error("Error en LogoutService:", error);
     await handleError(error, "logout");
-  }
+    throw error;
+  }
 };
 
 

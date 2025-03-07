@@ -62,14 +62,18 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     try {
       const response = await LogoutService()
-      if (response.status != 200) {
-        user.value = {} as User
-        token.value = ''
-      }
+
+      console.log('Logout response en store:', response) // Ahora debería mostrar el mensaje
+
+      // Si el backend responde con éxito, limpiar datos del usuario
+      user.value = {} as User
+      token.value = ''
+      localStorage.removeItem('token') // Asegúrate de borrar el token
+
+      console.log('Sesión cerrada correctamente')
     } catch (error: any) {
-      const errorMessage = 'Error during logout'
-      console.error(errorMessage, error)
-      await logService.log('error', errorMessage, { error })
+      console.error('Error durante el logout', error)
+      await logService.log('error', 'Error durante el logout', { error })
     }
   }
 

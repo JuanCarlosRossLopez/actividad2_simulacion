@@ -15,8 +15,17 @@ export const getCommentService = async () => {
   return await genericRequestAuthenticated(headers, base_url + '/attack/xss', 'GET')
 }
 export const addCommentService = async (user_id: number, comment:string) => {
-  return await genericRequestAuthenticated (headers, base_url + 'attack/xss', 'POST', {user_id, comment})
+  return await genericRequestAuthenticated (headers, base_url + '/attack/xss-add', 'POST', {user_id, comment})
 }
 
-export const deleteCommentService = async (id: number) =>
-  return await genericRequestAuthenticated
+export const deleteCommentService = async (id: number) => {
+  return await genericRequestAuthenticated(headers, base_url + '/attack/xss-delete', 'DELETE', {id})
+}
+
+export const getItemsService = async () => {
+  return await genericRequestAuthenticated (headers, base_url + '/items', 'GET')
+}
+
+export const addItemService = async (name: string, description:string) => {
+  return await genericRequestAuthenticated (headers, base_url + '/items', 'POST', {name, description})
+}
